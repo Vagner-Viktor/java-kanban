@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
-    protected Long idCont = 1L;
-    protected HashMap<Long, Task> tasksMap = new HashMap<>();
-    protected HashMap<Long, Epic> epicsMap = new HashMap<>();
-    protected HashMap<Long, Subtask> subtasksMap = new HashMap<>();
+    private Long idCont = 1L;
+    private HashMap<Long, Task> tasksMap = new HashMap<>();
+    private HashMap<Long, Epic> epicsMap = new HashMap<>();
+    private HashMap<Long, Subtask> subtasksMap = new HashMap<>();
 
 
     public HashMap<Long, Task> getTasksMap() {
