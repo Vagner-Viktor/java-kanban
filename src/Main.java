@@ -77,7 +77,9 @@ public class Main {
         newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
 
-        System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
+        System.out.println("\n\n\n" + taskManager.getTasks() +
+                taskManager.getEpics() +
+                taskManager.getSubtasksMap());
 
 
         newEpic = taskManager.getEpic(newEpicId);
@@ -86,19 +88,27 @@ public class Main {
         newTask = taskManager.getTask(newTaskId);
         newTask.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(newTask);
-        System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
-
+        System.out.println("\n\n\n" + taskManager.getTasks() +
+                taskManager.getEpics() +
+                taskManager.getSubtasksMap());
 
         taskManager.deleteEpic(newEpicId);
-        System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
+        System.out.println("\n\n\n" + taskManager.getTasks() +
+                taskManager.getEpics() +
+                taskManager.getSubtasksMap());
 
         taskManager.deleteAllTasks();
-        System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
+        System.out.println("\n\n\n" + taskManager.getTasks() +
+                taskManager.getEpics() +
+                taskManager.getSubtasksMap());
 
         taskManager.deleteAllSubtasks();
-        System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
+        System.out.println("\n\n\n" + taskManager.getTasks() +
+                taskManager.getEpics() +
+                taskManager.getSubtasksMap());
 
         taskManager.deleteAllEpic();
-        System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
-    }
+        System.out.println("\n\n\n" + taskManager.getTasks() +
+                taskManager.getEpics() +
+                taskManager.getSubtasksMap());    }
 }

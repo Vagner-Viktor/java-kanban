@@ -14,6 +14,7 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.type = TaskTypes.TASK;
     }
 
     public String getName() {

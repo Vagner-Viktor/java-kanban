@@ -9,6 +9,17 @@ public class Subtask extends Task {
         this.setType(TaskTypes.SUBTASK);
     }
 
+    @Override
+    public String toString() {
+        return "\n" + this.getType() + "{" +
+                "\n id = " + this.getId() +
+                "\n name = " + this.getName() +
+                "\n status = " + this.getStatus() +
+                "\n description = " + this.getDescription() +
+                "\n epicId=" + epicId +
+                '}';
+    }
+
     public Long getEpicId() {
         return epicId;
     }

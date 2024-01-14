@@ -11,6 +11,17 @@ public class Epic extends Task {
         this.setType(TaskTypes.EPIC);
     }
 
+    @Override
+    public String toString() {
+        return "\n" + this.getType() + "{" +
+                "\n id = " + this.getId() +
+                "\n name = " + this.getName() +
+                "\n status = " + this.getStatus() +
+                "\n description = " + this.getDescription() +
+                "\n subtasksList=" + subtasksList +
+                '}';
+    }
+
     public ArrayList<Long> getSubtaskList() {
         return subtasksList;
     }

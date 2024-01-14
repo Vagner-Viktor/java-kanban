@@ -12,44 +12,16 @@ public class TaskManager {
     private HashMap<Long, Subtask> subtasksMap = new HashMap<>();
 
 
-    public HashMap<Long, Task> getTasksMap() {
-        return tasksMap;
+    public ArrayList<Task> getTasks() {
+        return new ArrayList<>(tasksMap.values());
     }
 
-    public HashMap<Long, Epic> getEpicsMap() {
-        return epicsMap;
+    public ArrayList<Epic> getEpics() {
+        return new ArrayList<>(epicsMap.values());
     }
 
-    public HashMap<Long, Subtask> getSubtasksMap() {
-        return subtasksMap;
-    }
-
-
-    public ArrayList<Task> getAllTypesTasks() {
-        ArrayList<Task> allTasks = new ArrayList<>();
-        for (Task value : tasksMap.values()) {
-            Task newTask = new Task(value.getName(), value.getDescription());
-            newTask.setId(value.getId());
-            newTask.setType(TaskTypes.TASK);
-            newTask.setStatus(value.getStatus());
-            allTasks.add(newTask);
-        }
-        for (Epic value : epicsMap.values()) {
-            Task newTask = new Task(value.getName(), value.getDescription());
-            newTask.setId(value.getId());
-            newTask.setType(TaskTypes.EPIC);
-            newTask.setStatus(value.getStatus());
-            allTasks.add(newTask);
-            for (Long subtaskId : value.getSubtaskList()) {
-                Subtask subtaskValue = subtasksMap.get(subtaskId);
-                Task newSubtask = new Task(subtaskValue.getName(), subtaskValue.getDescription());
-                newSubtask.setId(subtaskValue.getId());
-                newSubtask.setType(TaskTypes.SUBTASK);
-                newSubtask.setStatus(subtaskValue.getStatus());
-                allTasks.add(newSubtask);
-            }
-        }
-        return allTasks;
+    public ArrayList<Subtask> getSubtasksMap() {
+        return new ArrayList<>(subtasksMap.values());
     }
 
     public ArrayList<Subtask> getAllEpicsSubtask(Long epicId) {
