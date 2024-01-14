@@ -1,3 +1,9 @@
+import managers.TaskManager;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -9,72 +15,76 @@ public class Main {
         Subtask newSubtask;
         Epic newEpic;
 
-        newTaskId = taskManager.addTask("Вынести мусор", "Вынести весь мусор, отсортировав его");
+        newTask = new Task("Вынести мусор", "Вынести весь мусор, отсортировав его");
+        newTaskId = taskManager.addTask(newTask);
 
-        newEpicId = taskManager.addEpic("Поменять зимние шины на летние на автомобиле",
+        newEpic = new Epic("Поменять зимние шины на летние на автомобиле",
                 "Поменять шины в автомобиле с летних на зимние");
-        taskManager.addSubtask("Заказать зимние шины",
-                "Позвонить в фирму по хранению шин и заказать со склада зимние шины",
-                newEpicId);
-        taskManager.addSubtask("Назначить встречу по замене шин",
-                "Договориться о времени замены шин",
-                newEpicId);
-        taskManager.addSubtask("Договориться о хранении летних шин",
-                "Договориться о хранении летних шин, выяснить стоимость и сроки хранения",
-                newEpicId);
-        taskManager.addSubtask("Провести диагностику шин",
-                "Проверить давление, провести сход-развал",
-                newEpicId);
+        newEpicId = taskManager.addEpic(newEpic);
+        newSubtask = new Subtask("Заказать зимние шины",
+                "Позвонить в фирму по хранению шин и заказать со склада зимние шины");
+        taskManager.addSubtask(newSubtask, newEpicId);
+        newSubtask = new Subtask("Назначить встречу по замене шин",
+                "Договориться о времени замены шин");
+        taskManager.addSubtask(newSubtask, newEpicId);
+        newSubtask = new Subtask("Договориться о хранении летних шин",
+                "Договориться о хранении летних шин, выяснить стоимость и сроки хранения");
+        taskManager.addSubtask(newSubtask, newEpicId);
+        newSubtask = new Subtask("Провести диагностику шин",
+                "Проверить давление, провести балансировку");
+        taskManager.addSubtask(newSubtask, newEpicId);
 
-        newEpicId = taskManager.addEpic("Путешествие на выходные",
+        newEpic = new Epic("Путешествие на выходные",
                 "Запланировать путешествие на выходные на машине");
-        taskManager.addSubtask("Выбрать город",
-                "Выбрать город в пределах 300км, где еще не были",
-                newEpicId);
-        newSubtaskId = taskManager.addSubtask("Выбрать отель",
-                "Выбрать отель в центре с парковкой",
-                newEpicId);
+        newEpicId = taskManager.addEpic(newEpic);
+        newSubtask = new Subtask("Выбрать город",
+                "Выбрать город в пределах 300км, где еще не были");
+        taskManager.addSubtask(newSubtask, newEpicId);
+        newSubtask = new Subtask("Выбрать отель",
+                "Выбрать отель в центре с парковкой");
+        newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
-        newSubtask.status = Status.IN_PROGRESS;
+        newSubtask.setStatus(Status.IN_PROGRESS);
         taskManager.updateSubtask(newSubtask);
 
-        taskManager.addSubtask("Составить список достопримечательностей",
-                "Найти главные достопримечательности города и составить маршрут посещения",
-                newEpicId);
-        taskManager.addSubtask("Выбрать рестораны",
-                "Определить список ресторанов, которые посетим по маршруту посещения достопримечательностей",
-                newEpicId);
+        newSubtask = new Subtask("Составить список достопримечательностей",
+                "Найти главные достопримечательности города и составить маршрут посещения");
+        taskManager.addSubtask(newSubtask, newEpicId);
+        newSubtask = new Subtask("Выбрать рестораны",
+                "Определить список ресторанов, которые посетим по маршруту посещения достопримечательностей");
+        taskManager.addSubtask(newSubtask, newEpicId);
 
 
-        newEpicId = taskManager.addEpic("Перевести слова на английский",
+        newEpic = new Epic("Перевести слова на английский",
                 "Перевести и выучить слова на английском");
-        newSubtaskId = taskManager.addSubtask("Задача",
-                "Задача - Task",
-                newEpicId);
+        newEpicId = taskManager.addEpic(newEpic);
+        newSubtask = new Subtask("Задача",
+                "Задача - tasks.Task");
+        newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
-        newSubtask.status = Status.DONE;
+        newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
-        newSubtaskId = taskManager.addSubtask("Подзадача",
-                "Подзадача - Subtask",
-                newEpicId);
+        newSubtask = new Subtask("Подзадача",
+                "Подзадача - tasks.Subtask");
+        newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
-        newSubtask.status = Status.DONE;
+        newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
-        newSubtaskId = taskManager.addSubtask("Эпик",
-                "Эпик - Epic",
-                newEpicId);
+        newSubtask = new Subtask("Эпик",
+                "Эпик - tasks.Epic");
+        newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
-        newSubtask.status = Status.DONE;
+        newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
 
         System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
 
 
         newEpic = taskManager.getEpic(newEpicId);
-        newEpic.description = "Только перевести слова с английского";
+        newEpic.setDescription("Только перевести слова с английского");
         taskManager.updateEpic(newEpic);
         newTask = taskManager.getTask(newTaskId);
-        newTask.status = Status.IN_PROGRESS;
+        newTask.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(newTask);
         System.out.println("\n\n\n" + taskManager.getAllTypesTasks());
 

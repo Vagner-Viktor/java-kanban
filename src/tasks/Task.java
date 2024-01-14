@@ -1,27 +1,61 @@
+package tasks;
+
 import java.util.Objects;
 
 public class Task {
-    String name;
-    TaskTypes type;
-    String description;
-    Long id;
-    Status status;
+    private String name;
+    private TaskTypes type;
+    private String description;
+    private Long id;
+    private Status status;
 
-    public Task(String name, String description, Long id) {
+
+    public Task(String name, String description) {
         this.name = name;
         this.description = description;
-        this.id = id;
         this.status = Status.NEW;
-        this.type = TaskTypes.TASK;
     }
 
-    public Task(String name, String description, Long id, TaskTypes type, Status status) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
-        this.description = description;
-        this.id = id;
-        this.status = status;
+    }
+
+    public TaskTypes getType() {
+        return type;
+    }
+
+    public void setType(TaskTypes type) {
         this.type = type;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
 
     @Override
     public boolean equals(Object o) {
