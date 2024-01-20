@@ -17,6 +17,7 @@ public class Task {
         this.type = TaskTypes.TASK;
     }
 
+
     public String getName() {
         return name;
     }
@@ -76,11 +77,16 @@ public class Task {
 
     @Override
     public String toString() {
-        return "\n" + type + "{" +
+        return type + "{" +
                 "\n id = " + id +
                 "\n name = " + name +
                 "\n status = " + status +
                 "\n description = " + description +
                 '}';
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

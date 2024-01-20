@@ -1,157 +1,57 @@
 package managers;
 
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class TaskManager {
-    private Long idCont = 1L;
-    private HashMap<Long, Task> tasksMap = new HashMap<>();
-    private HashMap<Long, Epic> epicsMap = new HashMap<>();
-    private HashMap<Long, Subtask> subtasksMap = new HashMap<>();
+public interface TaskManager {
 
+    Long getIdCont();
 
-    public ArrayList<Task> getTasks() {
-        return new ArrayList<>(tasksMap.values());
-    }
+    ArrayList<Task> getHistory();
 
-    public ArrayList<Epic> getEpics() {
-        return new ArrayList<>(epicsMap.values());
-    }
+    ArrayList<Task> getTasks();
 
-    public ArrayList<Subtask> getSubtasksMap() {
-        return new ArrayList<>(subtasksMap.values());
-    }
+    ArrayList<Epic> getEpics();
 
-    public ArrayList<Subtask> getAllEpicsSubtask(Long epicId) {
-        if (!epicsMap.containsKey(epicId)) return null;
-        ArrayList<Subtask> epicsSubtasksList = new ArrayList<>();
-        for (Long subtaskId : epicsMap.get(epicId).getSubtaskList()) {
-            epicsSubtasksList.add(subtasksMap.get(subtaskId));
-        }
-        return epicsSubtasksList;
-    }
+    ArrayList<Subtask> getSubtasks();
 
-    public void deleteAllTypesTasks() {
-        tasksMap.clear();
-        epicsMap.clear();
-        subtasksMap.clear();
-    }
+    ArrayList<Subtask> getEpicSubtasks(Long epicId);
 
-    public boolean deleteTask(Long taskId) {
-        if (!tasksMap.containsKey(taskId)) return false;
-        tasksMap.remove(taskId);
-        return true;
-    }
+    void deleteAllTypesTasks();
 
-    public boolean deleteEpic(Long epicId) {
-        if (!epicsMap.containsKey(epicId)) return false;
-        for (Long subtaskId : epicsMap.get(epicId).getSubtaskList()) {
-            if (subtasksMap.containsKey(subtaskId)) subtasksMap.remove(subtaskId);
-        }
-        epicsMap.remove(epicId);
-        return true;
-    }
+    boolean deleteTask(Long taskId);
 
-    public boolean deleteSubtask(Long subtaskId) {
-        if (!subtasksMap.containsKey(subtaskId)) return false;
-        Long epicId = subtasksMap.get(subtaskId).getEpicId();
-        if (!epicsMap.containsKey(epicId)) return false;
-        epicsMap.get(epicId).removeSubtask(subtaskId);
-        epicsMap.get(epicId).setStatus(setCurrentEpicStatus(epicsMap.get(epicId)));
-        subtasksMap.remove(subtaskId);
-        return true;
-    }
+    boolean deleteEpic(Long epicId);
 
-    public void deleteAllTasks() {
-        tasksMap.clear();
-    }
+    boolean deleteSubtask(Long subtaskId);
 
-    public void deleteAllEpic() {
-        epicsMap.clear();
-        subtasksMap.clear();
-    }
+    void deleteAllTasks();
 
-    public void deleteAllSubtasks() {
-        for (Epic epic : epicsMap.values()) {
-            epic.clearSubtaskList();
-            epic.setStatus(Status.NEW);
-        }
-        subtasksMap.clear();
-    }
+    void deleteAllEpic();
 
-    public Long addTask(Task newTask) {
-        newTask.setId(idCont++);
-        tasksMap.put(newTask.getId(), newTask);
-        return newTask.getId();
-    }
+    void deleteAllSubtasks();
 
-    public Long addEpic(Epic newEpic) {
-        newEpic.setId(idCont++);
-        epicsMap.put(newEpic.getId(), newEpic);
-        return newEpic.getId();
-    }
+    Long addTask(Task newTask);
 
-    public Long addSubtask(Subtask newSubtask, Long epicId) {
-        if (!epicsMap.containsKey(epicId)) return null;
-        newSubtask.setId(idCont++);
-        newSubtask.setEpicId(epicId);
-        subtasksMap.put(newSubtask.getId(), newSubtask);
-        epicsMap.get(epicId).addSubtask(newSubtask.getId());
-        epicsMap.get(epicId).setStatus(setCurrentEpicStatus(epicsMap.get(epicId)));
-        return newSubtask.getId();
-    }
+    Long addEpic(Epic newEpic);
 
-    public boolean updateSubtask(Subtask subtask) {
-        if (!subtasksMap.containsKey(subtask.getId())) return false;
-        subtasksMap.put(subtask.getId(), subtask);
-        if (epicsMap.containsKey(subtask.getEpicId()))
-            epicsMap.get(subtask.getEpicId()).setStatus(setCurrentEpicStatus(epicsMap.get(subtask.getEpicId())));
-        return true;
-    }
+    Long addSubtask(Subtask newSubtask, Long epicId);
 
-    public boolean updateEpic(Epic epic) {
-        if (!epicsMap.containsKey(epic.getId())) return false;
-        epic.setStatus(setCurrentEpicStatus(epic));
-        epicsMap.put(epic.getId(), epic);
-        return true;
-    }
+    boolean updateSubtask(Subtask subtask);
 
-    public boolean updateTask(Task task) {
-        if (!tasksMap.containsKey(task.getId())) return false;
-        tasksMap.put(task.getId(), task);
-        return true;
-    }
+    boolean updateEpic(Epic epic);
 
+    boolean updateTask(Task task);
 
-    public Subtask getSubtask(Long subtaskId) {
-        return subtasksMap.get(subtaskId);
-    }
+    Subtask getSubtask(Long subtaskId);
 
-    public Task getTask(Long taskId) {
-        if (tasksMap.containsKey(taskId)) return tasksMap.get(taskId);
-        return null;
-    }
+    Task getTask(Long taskId);
 
-    public Epic getEpic(Long epicId) {
-        if (epicsMap.containsKey(epicId)) return epicsMap.get(epicId);
-        return null;
-    }
+    Epic getEpic(Long epicId);
 
-    public Status setCurrentEpicStatus(Epic epic) {
-        boolean allInDone = true;
-        for (Long l : epic.getSubtaskList()) {
-            if (!Status.DONE.equals(subtasksMap.get(l).getStatus())){
-                allInDone = false;
-                break;
-            }
-        }
-        if (allInDone) return Status.DONE;
-
-        for (Long l : epic.getSubtaskList()) {
-            if (!Status.NEW.equals(subtasksMap.get(l).getStatus())) return Status.IN_PROGRESS;
-        }
-        return Status.NEW;
-    }
+    Status setCurrentEpicStatus(Epic epic);
 }

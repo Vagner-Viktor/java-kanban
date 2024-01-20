@@ -1,3 +1,4 @@
+import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
 import tasks.Status;
@@ -7,7 +8,7 @@ import tasks.Task;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
         Long newEpicId;
         Long newTaskId;
         Long newSubtaskId;
@@ -59,28 +60,25 @@ public class Main {
                 "Перевести и выучить слова на английском");
         newEpicId = taskManager.addEpic(newEpic);
         newSubtask = new Subtask("Задача",
-                "Задача - tasks.Task");
+                "Задача - Task");
         newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
         newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
         newSubtask = new Subtask("Подзадача",
-                "Подзадача - tasks.Subtask");
+                "Подзадача - Subtask");
         newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
         newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
         newSubtask = new Subtask("Эпик",
-                "Эпик - tasks.Epic");
+                "Эпик - Epic");
         newSubtaskId = taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = taskManager.getSubtask(newSubtaskId);
         newSubtask.setStatus(Status.DONE);
         taskManager.updateSubtask(newSubtask);
 
-        System.out.println("\n\n\n" + taskManager.getTasks() +
-                taskManager.getEpics() +
-                taskManager.getSubtasksMap());
-
+        printAllTasks(taskManager);
 
         newEpic = taskManager.getEpic(newEpicId);
         newEpic.setDescription("Только перевести слова с английского");
@@ -88,27 +86,44 @@ public class Main {
         newTask = taskManager.getTask(newTaskId);
         newTask.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(newTask);
-        System.out.println("\n\n\n" + taskManager.getTasks() +
-                taskManager.getEpics() +
-                taskManager.getSubtasksMap());
+        printAllTasks(taskManager);
 
         taskManager.deleteEpic(newEpicId);
-        System.out.println("\n\n\n" + taskManager.getTasks() +
-                taskManager.getEpics() +
-                taskManager.getSubtasksMap());
+        printAllTasks(taskManager);
+
 
         taskManager.deleteAllTasks();
-        System.out.println("\n\n\n" + taskManager.getTasks() +
-                taskManager.getEpics() +
-                taskManager.getSubtasksMap());
+        printAllTasks(taskManager);
 
         taskManager.deleteAllSubtasks();
-        System.out.println("\n\n\n" + taskManager.getTasks() +
-                taskManager.getEpics() +
-                taskManager.getSubtasksMap());
+        printAllTasks(taskManager);
 
         taskManager.deleteAllEpic();
-        System.out.println("\n\n\n" + taskManager.getTasks() +
-                taskManager.getEpics() +
-                taskManager.getSubtasksMap());    }
+        printAllTasks(taskManager);
+    }
+
+    private static void printAllTasks(TaskManager manager) {
+        System.out.println("Задачи:");
+        for (Task task : manager.getTasks()) {
+            System.out.println(task);
+        }
+        System.out.println("Эпики:");
+        for (Task epic : manager.getEpics()) {
+            System.out.println(epic);
+
+            for (Task task : manager.getEpicSubtasks(epic.getId())) {
+                System.out.println("--> " + task);
+            }
+        }
+        System.out.println("Подзадачи:");
+        for (Task subtask : manager.getSubtasks()) {
+            System.out.println(subtask);
+        }
+
+        System.out.println("История. Всего элементов: " + manager.getHistory().size());
+        int index = 1;
+        for (Task task : manager.getHistory()) {
+            System.out.println(index++ + ". " + task);
+        }
+    }
 }
