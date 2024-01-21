@@ -4,12 +4,14 @@ import tasks.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private Long idCont = 1L;
-    private HashMap<Long, Task> tasksMap = new HashMap<>();
-    private HashMap<Long, Epic> epicsMap = new HashMap<>();
-    private HashMap<Long, Subtask> subtasksMap = new HashMap<>();
+    private Map<Long, Task> tasksMap = new HashMap<>();
+    private Map<Long, Epic> epicsMap = new HashMap<>();
+    private Map<Long, Subtask> subtasksMap = new HashMap<>();
 
     final private HistoryManager historyManager = Managers.getDefaultHistory();
 
@@ -19,27 +21,27 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
     @Override
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return new ArrayList<>(tasksMap.values());
     }
 
     @Override
-    public ArrayList<Epic> getEpics() {
+    public List<Epic> getEpics() {
         return new ArrayList<>(epicsMap.values());
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasks() {
+    public List<Subtask> getSubtasks() {
         return new ArrayList<>(subtasksMap.values());
     }
 
     @Override
-    public ArrayList<Subtask> getEpicSubtasks(Long epicId) {
+    public List<Subtask> getEpicSubtasks(Long epicId) {
         if (!epicsMap.containsKey(epicId)) return null;
         ArrayList<Subtask> epicsSubtasksList = new ArrayList<>();
         for (Long subtaskId : epicsMap.get(epicId).getSubtaskList()) {
@@ -157,23 +159,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubtask(Long subtaskId) {
-        if (!subtasksMap.containsKey(subtaskId)) return null;
-        historyManager.add(subtasksMap.get(subtaskId));
-        return subtasksMap.get(subtaskId);
+        Subtask subtask = subtasksMap.get(subtaskId);
+        if (subtask != null) {
+            historyManager.add(subtasksMap.get(subtaskId));
+        }
+        return subtask;
     }
 
     @Override
     public Task getTask(Long taskId) {
-        if (!tasksMap.containsKey(taskId)) return null;
-        historyManager.add(tasksMap.get(taskId));
-        return tasksMap.get(taskId);
+        Task task = tasksMap.get(taskId);
+        if (task != null) {
+            historyManager.add(tasksMap.get(taskId));
+        }
+        return task;
     }
 
     @Override
     public Epic getEpic(Long epicId) {
-        if (!epicsMap.containsKey(epicId)) return null;
-        historyManager.add(epicsMap.get(epicId));
-        return epicsMap.get(epicId);
+        Epic epic = epicsMap.get(epicId);
+        if (epic != null) {
+            historyManager.add(epicsMap.get(epicId));
+        }
+        return epic;
     }
 
     @Override

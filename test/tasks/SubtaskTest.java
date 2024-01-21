@@ -16,5 +16,13 @@ class SubtaskTest {
         assertEquals(subtask.getDescription(), description, "Описание подзадачи не совпадает.");
         assertEquals(subtask.getStatus(), Status.NEW, "Cтатус подзадачи не верный.");
     }
+    @Test
+    void checkEqualsSubtask() {
+        Subtask subtask1 = new Subtask("Test addNewSubtaskWithSameID", "Test addNewSubtaskWithSameID description");
+        subtask1.setId(10L);
+        Subtask subtask2 = new Subtask("Test addNewSubtaskWithSameID", "Test addNewSubtaskWithSameID description");
+        subtask2.setId(10L);
 
+        assertEquals(subtask1, subtask2, "Подзадачи не совпадают.");
+    }
 }

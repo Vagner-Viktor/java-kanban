@@ -6,20 +6,21 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 
     Long getIdCont();
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
-    ArrayList<Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
-    ArrayList<Subtask> getEpicSubtasks(Long epicId);
+    List<Subtask> getEpicSubtasks(Long epicId);
 
     void deleteAllTypesTasks();
 
