@@ -77,7 +77,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return type + "{" +
+        return "\n" + type + "{" +
                 "\n id = " + id +
                 "\n name = " + name +
                 "\n status = " + status +
@@ -86,7 +86,11 @@ public class Task {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public Task clone() {
+        Task task = new Task(this.name, this.description);
+        task.setId(this.id);
+        task.setStatus(this.status);
+        task.setType(this.type);
+        return task;
     }
 }

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EpicTest {
 
     @Test
-    void newEpic(){
+    void newEpic() {
         String name = "EpicName";
         String description = "EpicDescription";
         Epic epic = new Epic(name, description);
@@ -25,5 +25,14 @@ class EpicTest {
         epic2.setId(10L);
 
         assertEquals(epic1, epic2, "Эпики не совпадают.");
+    }
+
+    @Test
+    void addSubtaskWithEpicIdToEpic() {
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        final long epicId = 10;
+        epic.setId(epicId);
+        epic.addSubtask(epicId);
+        assertEquals(0, epic.getSubtaskList().size(), "В эпик добавлена подзадача с ID эпика.");
     }
 }

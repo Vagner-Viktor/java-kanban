@@ -28,7 +28,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return this.getType() + "{" +
+        return "\n" + this.getType() + "{" +
                 "\n id = " + this.getId() +
                 "\n name = " + this.getName() +
                 "\n status = " + this.getStatus() +
@@ -49,11 +49,11 @@ public class Epic extends Task {
         subtasksList.clear();
     }
 
-    public void removeSubtask(Long subtaskId){
+    public void removeSubtask(Long subtaskId) {
         subtasksList.remove(subtaskId);
     }
 
-    public void addSubtask(Long subtaskId){
-        subtasksList.add(subtaskId);
+    public void addSubtask(Long subtaskId) {
+        if ((subtaskId != this.getId()) && !subtasksList.contains(subtaskId)) subtasksList.add(subtaskId);
     }
 }

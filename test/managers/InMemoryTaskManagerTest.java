@@ -21,6 +21,29 @@ class InMemoryTaskManagerTest {
 
 
     @Test
+    void addDifferentTypesOfTasksAndFindThemById() {
+        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        final long taskId = taskManager.addTask(task);
+        final Task savedTask = taskManager.getTask(taskId);
+
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final long epicId = taskManager.addEpic(epic);
+        final Epic savedEpic = taskManager.getEpic(epicId);
+
+        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
+        final long subtaskId = taskManager.addSubtask(subtask, epicId);
+        final Subtask savedSubtask = taskManager.getSubtask(subtaskId);
+
+        assertNotNull(savedTask, "Задача не найдена.");
+        assertNotNull(savedEpic, "Эпик не найден.");
+        assertNotNull(savedSubtask, "Подзадача не найдена.");
+
+        assertEquals(task, savedTask, "Задачи не совпадают.");
+        assertEquals(epic, savedEpic, "Эпики не совпадают.");
+        assertEquals(subtask, savedSubtask, "Подзадачи не совпадают.");
+    }
+
+    @Test
     void addTask() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
         final long taskId = taskManager.addTask(task);
@@ -90,7 +113,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void addTaskWithSameId() {
+    void checkThatTasksWithTheGivenIdAndTheGeneratedIdDoNotConflict() {
         Task task = new Task("Test addNewTaskWithSameID", "Test addNewTaskWithSameID description");
         final long taskId1 = taskManager.addTask(task);
         final Task savedTask1 = taskManager.getTask(taskId1);
@@ -100,6 +123,7 @@ class InMemoryTaskManagerTest {
         final long taskId2 = taskManager.addTask(task2);
         final Task savedTask2 = taskManager.getTask(taskId2);
 
+        assertNotEquals(taskId1, taskId2, "ID задач совпадают!");
         assertNotEquals(savedTask1, savedTask2, "Задачи совпадают!");
         final List<Task> tasks = taskManager.getTasks();
 

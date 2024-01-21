@@ -28,7 +28,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return this.getType() + "{" +
+        return "\n" + this.getType() + "{" +
                 "\n id = " + this.getId() +
                 "\n name = " + this.getName() +
                 "\n status = " + this.getStatus() +
@@ -42,6 +42,6 @@ public class Subtask extends Task {
     }
 
     public void setEpicId(Long epicId) {
-        this.epicId = epicId;
+        if (this.getId() != epicId) this.epicId = epicId;
     }
 }

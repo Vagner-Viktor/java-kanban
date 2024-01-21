@@ -25,4 +25,14 @@ class SubtaskTest {
 
         assertEquals(subtask1, subtask2, "Подзадачи не совпадают.");
     }
+
+    @Test
+    void setSubtaskEpicIdWithYourSubtaskId() {
+        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
+        final Long subtaskId = 10L;
+        subtask.setId(subtaskId);
+        subtask.setEpicId(subtaskId);
+        assertNotEquals(subtask.getId(), subtask.getEpicId(),
+                "ID сабтаски установлен в качестве ID эпика самой сабтаски.");
+    }
 }
