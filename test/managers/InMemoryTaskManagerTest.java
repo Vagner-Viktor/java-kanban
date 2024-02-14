@@ -6,6 +6,8 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -129,5 +131,42 @@ class InMemoryTaskManagerTest {
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(2, tasks.size(), "Неверное количество задач.");
+    }
+
+    @Test
+    void checkForNotActualIdSubtasksInEpics() {
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Long[] subtasksListID = {2L, 3L, 4L, 5L, 6L};
+        for (long l : subtasksListID) {
+            Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
+            subtask.setId(l);
+            taskManager.addSubtask(subtask, epicId);
+        }
+        Long[] subtasksRemovedListID = {3L, 4L, 5L};
+        for (long l : subtasksRemovedListID) {
+            taskManager.deleteSubtask(l);
+        }
+        final List<Subtask> subtasksInEpic = taskManager.getEpicSubtasks(epicId);
+        assertNotNull(subtasksInEpic, "Подзадачи эпика не возвращаются.");
+        assertEquals(2, subtasksInEpic.size(), "Неверное количество подзадач в эпике.");
+        for (Subtask subtask : subtasksInEpic) {
+            assertFalse(Arrays.asList(subtasksRemovedListID).contains(subtask.getId()),
+                    "В подзадачах эпика есть удаленная задача id=" + subtask.getId());
+        }
+    }
+
+    @Test
+    void checkActualEpicIdWhenDelSubtask(){
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
+        long subtask1Id = taskManager.addSubtask(subtask1, epicId);
+
+        Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
+        long subtask2Id = taskManager.addSubtask(subtask2, epicId);
+        subtask2.setEpicId(1000L);
+        taskManager.deleteSubtask(subtask2Id);
+        assertEquals(2, taskManager.getSubtasks().size(), "Удаление подзадачи с неактуальным эпиком");
     }
 }
