@@ -2,10 +2,7 @@ package managers;
 
 import tasks.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private Long idCont = 1L;
@@ -52,14 +49,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTypesTasks() {
+        clearHistorySet(tasksMap.keySet());
         tasksMap.clear();
+        clearHistorySet(epicsMap.keySet());
         epicsMap.clear();
+        clearHistorySet(subtasksMap.keySet());
         subtasksMap.clear();
     }
 
     @Override
     public boolean deleteTask(Long taskId) {
         if (!tasksMap.containsKey(taskId)) return false;
+        historyManager.remove(taskId);
         tasksMap.remove(taskId);
         return true;
     }
@@ -68,8 +69,12 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean deleteEpic(Long epicId) {
         if (!epicsMap.containsKey(epicId)) return false;
         for (Long subtaskId : epicsMap.get(epicId).getSubtaskList()) {
-            if (subtasksMap.containsKey(subtaskId)) subtasksMap.remove(subtaskId);
+            if (subtasksMap.containsKey(subtaskId)) {
+                historyManager.remove(subtaskId);
+                subtasksMap.remove(subtaskId);
+            }
         }
+        historyManager.remove(epicId);
         epicsMap.remove(epicId);
         return true;
     }
@@ -81,18 +86,22 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epicsMap.containsKey(epicId)) return false;
         epicsMap.get(epicId).removeSubtask(subtaskId);
         epicsMap.get(epicId).setStatus(setCurrentEpicStatus(epicsMap.get(epicId)));
+        historyManager.remove(subtaskId);
         subtasksMap.remove(subtaskId);
         return true;
     }
 
     @Override
     public void deleteAllTasks() {
+        clearHistorySet(tasksMap.keySet());
         tasksMap.clear();
     }
 
     @Override
     public void deleteAllEpic() {
+        clearHistorySet(epicsMap.keySet());
         epicsMap.clear();
+        clearHistorySet(subtasksMap.keySet());
         subtasksMap.clear();
     }
 
@@ -102,7 +111,14 @@ public class InMemoryTaskManager implements TaskManager {
             epic.clearSubtaskList();
             epic.setStatus(Status.NEW);
         }
+        clearHistorySet(subtasksMap.keySet());
         subtasksMap.clear();
+    }
+
+    public void clearHistorySet(Set<Long> set){
+        for (Long l : set) {
+            historyManager.remove(l);
+        }
     }
 
     @Override
