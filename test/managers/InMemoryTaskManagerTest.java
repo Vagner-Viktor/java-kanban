@@ -18,7 +18,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        taskManager = Managers.getDefault();
+        taskManager = new InMemoryTaskManager();
     }
 
 
@@ -157,7 +157,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void checkActualEpicIdWhenDelSubtask(){
+    void checkActualEpicIdWhenDelSubtask() {
         Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
         final Long epicId = taskManager.addEpic(epic);
         Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
