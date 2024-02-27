@@ -17,7 +17,7 @@ public class Main {
         printAllTasks(taskManager);
     }
 
-    private static void makeExampleData(TaskManager taskManager){
+    private static void makeExampleData(TaskManager taskManager) {
         Long newEpicId;
         Long newTaskId;
         Long newSubtaskId;

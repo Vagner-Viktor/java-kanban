@@ -27,10 +27,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public File getFile() {
-        return file;
-    }
-
     @Override
     public boolean deleteTask(Long taskId) {
         boolean result = super.deleteTask(taskId);
@@ -125,10 +121,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static FileBackedTaskManager loadFromFile(File file) {
-//        id, type, name, status, description, epic
-//        1, TASK, Task1, NEW, Description task1,
-//        2, EPIC, Epic2, DONE, Description epic2,
-//        3, SUBTASK, Sub Task2, DONE, Description sub task3, 2
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
         Long countIndex = 1L;
         try (BufferedReader fileRead = new BufferedReader(new FileReader(file))) {
@@ -173,13 +165,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             fileBackedTaskManager.setIdCont(countIndex);
             fileBackedTaskManager.setFile(file);
         } catch (IOException e) {
-            //System.out.println("Произошла ошибка во время чтения файла.");
             throw new ManagerLoadException();
         }
         return fileBackedTaskManager;
     }
 
-    static String historyToString(HistoryManager manager) {
+    public static String historyToString(HistoryManager manager) {
         String result = "";
         for (Task task : manager.getHistory()) {
             result = result + task.getId() + ", ";
@@ -187,16 +178,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return result;
     }
 
-    static List<Long> historyFromString(String value) {
+    public static List<Long> historyFromString(String value) {
         String[] numbers = value.split(", ");
-        List<Long> historyList = new ArrayList();
+        List<Long> historyList = new ArrayList<>();
         for (String number : numbers) {
             if (!number.isBlank() && !number.isEmpty()) historyList.add(Long.parseLong(number));
         }
         return historyList;
     }
 
-    static public Task fromString(String value) {
+    public static Task fromString(String value) {
         String[] values = value.split(", ");
         switch (TaskTypes.valueOf(values[1])) {
             case SUBTASK:
