@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
+import utils.FormatterUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -271,9 +272,41 @@ class FileBackedTaskManagerTest {
 
     @Test
     void loadTasksFromFile() {
-        assertEquals(1,taskManager.getTasks().size(), "Загружено неверное число задач");
-        assertEquals(2,taskManager.getEpics().size(), "Загружено неверное число эпиков");
-        assertEquals(8,taskManager.getSubtasks().size(), "Загружено неверное число подзадач");
-        assertEquals(2,taskManager.getHistory().size(), "Загружена неверно история");
+        assertEquals(1, taskManager.getTasks().size(), "Загружено неверное число задач");
+        assertEquals(2, taskManager.getEpics().size(), "Загружено неверное число эпиков");
+        assertEquals(8, taskManager.getSubtasks().size(), "Загружено неверное число подзадач");
+        assertEquals(2, taskManager.getHistory().size(), "Загружена неверно история");
+    }
+
+    @Test
+    void checkingSavingAndLoadingTasksInDifferentManagers() throws IOException {
+        File emptyFile = null;
+        try {
+            emptyFile = File.createTempFile("empty_for_tasks", ".csv");
+        } catch (IOException e) {
+            throw new ManagerLoadException();
+        }
+        TaskManager taskManager1 = new FileBackedTaskManager(emptyFile);
+        Task task = new Task("Test addNewTaskWithSameID", "Test addNewTaskWithSameID description");
+        final long taskId1 = taskManager1.addTask(task);
+        final Task savedTask1TM1 = taskManager1.getTask(taskId1);
+        Task task2 = new Task("Test addNewTaskWithSameID2", "Test addNewTaskWithSameID2 description");
+        final long taskId2 = taskManager1.addTask(task2);
+        final Task savedTask2TM1 = taskManager1.getTask(taskId2);
+        final int tasksSizeTM1 = taskManager1.getTasks().size();
+        final String historyTM1 = taskManager1.getHistory().toString();
+
+        TaskManager taskManager2 = FileBackedTaskManager.loadFromFile(emptyFile);
+        final Task savedTask1TM2 = taskManager2.getTask(taskId1);
+        final Task savedTask2TM2 = taskManager2.getTask(taskId2);
+        final int tasksSizeTM2 = taskManager2.getTasks().size();
+        final String historyTM2 = taskManager2.getHistory().toString();
+
+        assertEquals(savedTask1TM1, savedTask1TM2, "Задачи не совпадают!");
+        assertEquals(savedTask2TM1, savedTask2TM2, "Задачи не совпадают!");
+        assertEquals(tasksSizeTM1, tasksSizeTM2, "Количество задач не совпадает!");
+        assertEquals(historyTM1, historyTM2, "История не совпадает!");
+
+        Files.deleteIfExists(Paths.get(emptyFile.toString()));
     }
 }
