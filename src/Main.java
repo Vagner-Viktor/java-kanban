@@ -1,3 +1,4 @@
+import managers.FileBackedTaskManager;
 import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
@@ -5,10 +6,18 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.File;
+
 public class Main {
 
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
+        taskManager = FileBackedTaskManager.loadFromFile(new File("tasks.csv"));
+        //   makeExampleData(taskManager);
+        printAllTasks(taskManager);
+    }
+
+    private static void makeExampleData(TaskManager taskManager) {
         Long newEpicId;
         Long newTaskId;
         Long newSubtaskId;
@@ -16,7 +25,7 @@ public class Main {
         Subtask newSubtask;
         Epic newEpic;
 
-        newTask = new Task("Вынести мусор", "Вынести весь мусор, отсортировав его");
+        newTask = new Task("Вынести мусор", "Вынести весь мусор после сортировки");
         newTaskId = taskManager.addTask(newTask);
 
         newEpic = new Epic("Поменять зимние шины на летние на автомобиле",
@@ -29,17 +38,17 @@ public class Main {
                 "Договориться о времени замены шин");
         taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = new Subtask("Договориться о хранении летних шин",
-                "Договориться о хранении летних шин, выяснить стоимость и сроки хранения");
+                "Договориться о хранении летних шин и выяснить стоимость и сроки хранения");
         taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = new Subtask("Провести диагностику шин",
-                "Проверить давление, провести балансировку");
+                "Проверить давление и провести балансировку");
         taskManager.addSubtask(newSubtask, newEpicId);
 
         newEpic = new Epic("Путешествие на выходные",
                 "Запланировать путешествие на выходные на машине");
         newEpicId = taskManager.addEpic(newEpic);
         newSubtask = new Subtask("Выбрать город",
-                "Выбрать город в пределах 300км, где еще не были");
+                "Выбрать город в пределах 300км. где еще не были");
         taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = new Subtask("Выбрать отель",
                 "Выбрать отель в центре с парковкой");
@@ -52,7 +61,7 @@ public class Main {
                 "Найти главные достопримечательности города и составить маршрут посещения");
         taskManager.addSubtask(newSubtask, newEpicId);
         newSubtask = new Subtask("Выбрать рестораны",
-                "Определить список ресторанов, которые посетим по маршруту посещения достопримечательностей");
+                "Определить список ресторанов по маршруту посещения достопримечательностей");
         taskManager.addSubtask(newSubtask, newEpicId);
 
 
@@ -89,16 +98,6 @@ public class Main {
         printAllTasks(taskManager);
 
         taskManager.deleteEpic(newEpicId);
-        printAllTasks(taskManager);
-
-
-        taskManager.deleteAllTasks();
-        printAllTasks(taskManager);
-
-        taskManager.deleteAllSubtasks();
-        printAllTasks(taskManager);
-
-        taskManager.deleteAllEpic();
         printAllTasks(taskManager);
     }
 
