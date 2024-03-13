@@ -6,9 +6,11 @@ import tasks.Subtask;
 import tasks.Task;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
+    void setIdCont(Long idCont);
     Long getIdCont();
 
     List<Task> getHistory();
@@ -35,6 +37,8 @@ public interface TaskManager {
 
     void deleteAllSubtasks();
 
+    void clearHistorySet(Set<Long> set);
+
     Long addTask(Task newTask);
 
     Long addEpic(Epic newEpic);
@@ -53,5 +57,10 @@ public interface TaskManager {
 
     Epic getEpic(Long epicId);
 
+    void updateDataInEpic(Epic epic);
+
     Status setCurrentEpicStatus(Epic epic);
+    void updateEpicDurationAndStartEndTime(Epic epic);
+
+    void saveInHistory(Task task);
 }

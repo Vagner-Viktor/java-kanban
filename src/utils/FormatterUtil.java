@@ -3,6 +3,8 @@ package utils;
 import managers.HistoryManager;
 import tasks.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,8 @@ public class FormatterUtil {
                 subtask.setStatus(Status.valueOf(values[3]));
                 subtask.setType(TaskTypes.valueOf(values[1]));
                 subtask.setEpicId(Long.parseLong(values[5]));
+                subtask.setStartTime(LocalDateTime.parse(values[6], Task.DATE_TIME_FORMATTER));
+                subtask.setDuration(Duration.ofMinutes(Integer.parseInt(values[7])));
                 return subtask;
             case EPIC:
                 Epic epic = new Epic(values[2], values[4]);
@@ -45,28 +49,44 @@ public class FormatterUtil {
                 task.setId(Long.parseLong(values[0]));
                 task.setStatus(Status.valueOf(values[3]));
                 task.setType(TaskTypes.valueOf(values[1]));
+                task.setStartTime(LocalDateTime.parse(values[5], Task.DATE_TIME_FORMATTER));
+                task.setDuration(Duration.ofMinutes(Integer.parseInt(values[6])));
                 return task;
+            default: return null;
         }
-        return null;
     }
 
     public static String toString(Task task) {
         String result;
-        if (TaskTypes.SUBTASK.equals(task.getType())) {
-            Subtask subtask = (Subtask) task;
-            result = subtask.getId() + ", " +
-                    subtask.getType() + ", " +
-                    subtask.getName() + ", " +
-                    subtask.getStatus() + ", " +
-                    subtask.getDescription() + ", " +
-                    subtask.getEpicId();
-        } else {
-            result = task.getId() + ", " +
-                    task.getType() + ", " +
-                    task.getName() + ", " +
-                    task.getStatus() + ", " +
-                    task.getDescription();
+        switch (task.getType()) {
+            case SUBTASK:
+                Subtask subtask = (Subtask) task;
+                result = subtask.getId() + ", " +
+                        subtask.getType() + ", " +
+                        subtask.getName() + ", " +
+                        subtask.getStatus() + ", " +
+                        subtask.getDescription() + ", " +
+                        subtask.getEpicId() + ", " +
+                        subtask.getStartTime().format(Task.DATE_TIME_FORMATTER) + ", " +
+                        subtask.getDuration().toMinutes();
+                return result;
+            case EPIC:
+                result = task.getId() + ", " +
+                        task.getType() + ", " +
+                        task.getName() + ", " +
+                        task.getStatus() + ", " +
+                        task.getDescription();
+                return result;
+            case TASK:
+                result = task.getId() + ", " +
+                        task.getType() + ", " +
+                        task.getName() + ", " +
+                        task.getStatus() + ", " +
+                        task.getDescription() + ", " +
+                        task.getStartTime().format(Task.DATE_TIME_FORMATTER) + ", " +
+                        task.getDuration().toMinutes();
+                return result;
+            default: return null;
         }
-        return result;
     }
 }

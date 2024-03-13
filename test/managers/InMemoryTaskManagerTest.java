@@ -6,6 +6,8 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +26,8 @@ class InMemoryTaskManagerTest {
     @Test
     void addDifferentTypesOfTasksAndFindThemById() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
+        task.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        task.setDuration(Duration.ofMinutes(60));
         final long taskId = taskManager.addTask(task);
         final Task savedTask = taskManager.getTask(taskId);
 
@@ -32,6 +36,8 @@ class InMemoryTaskManagerTest {
         final Epic savedEpic = taskManager.getEpic(epicId);
 
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
+        subtask.setStartTime(LocalDateTime.of(2024,03,02,10,00));
+        subtask.setDuration(Duration.ofMinutes(60));
         final long subtaskId = taskManager.addSubtask(subtask, epicId);
         final Subtask savedSubtask = taskManager.getSubtask(subtaskId);
 
@@ -47,6 +53,8 @@ class InMemoryTaskManagerTest {
     @Test
     void addTask() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
+        task.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        task.setDuration(Duration.ofMinutes(60));
         final long taskId = taskManager.addTask(task);
         final Task savedTask = taskManager.getTask(taskId);
 
@@ -81,6 +89,8 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
         final long epicId = taskManager.addEpic(epic);
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
+        subtask.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        subtask.setDuration(Duration.ofMinutes(60));
         final long subtaskId = taskManager.addSubtask(subtask, epicId);
         final Subtask savedSubtask = taskManager.getSubtask(subtaskId);
 
@@ -99,6 +109,8 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final long epicId = taskManager.addEpic(epic);
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
+        subtask.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        subtask.setDuration(Duration.ofMinutes(60));
         subtask.setId(epicId);
         final Long subtaskId = taskManager.addSubtask(subtask, epicId);
         assertNull(subtaskId, "В эпик добавлена подзадача с ID эпика.");
@@ -109,6 +121,8 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
         final long epicId = taskManager.addEpic(epic);
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
+        subtask.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        subtask.setDuration(Duration.ofMinutes(60));
         final Long subtaskId = taskManager.addSubtask(subtask, subtask.getId());
         assertNull(subtaskId, "Добавлена сабтаска с ID самой сабтаски.");
     }
@@ -139,6 +153,8 @@ class InMemoryTaskManagerTest {
         Long[] subtasksListID = {2L, 3L, 4L, 5L, 6L};
         for (long l : subtasksListID) {
             Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
+            subtask.setStartTime(LocalDateTime.of(2024,03,01,10+(int)l,00));
+            subtask.setDuration(Duration.ofMinutes(60));
             subtask.setId(l);
             taskManager.addSubtask(subtask, epicId);
         }
@@ -160,9 +176,13 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
         final Long epicId = taskManager.addEpic(epic);
         Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
+        subtask1.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        subtask1.setDuration(Duration.ofMinutes(60));
         long subtask1Id = taskManager.addSubtask(subtask1, epicId);
 
         Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
+        subtask2.setStartTime(LocalDateTime.of(2024,03,01,10,00));
+        subtask2.setDuration(Duration.ofMinutes(60));
         long subtask2Id = taskManager.addSubtask(subtask2, epicId);
         subtask2.setEpicId(1000L);
         taskManager.deleteSubtask(subtask2Id);

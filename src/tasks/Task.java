@@ -1,14 +1,19 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     private String name;
     private TaskTypes type;
     private String description;
     private Long id;
     private Status status;
-
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description) {
         this.name = name;
@@ -16,7 +21,6 @@ public class Task {
         this.status = Status.NEW;
         this.type = TaskTypes.TASK;
     }
-
 
     public String getName() {
         return name;
@@ -58,6 +62,25 @@ public class Task {
         this.status = status;
     }
 
+    public LocalDateTime getEndTime(){
+        return startTime.plus(duration);
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -65,14 +88,17 @@ public class Task {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return Objects.equals(name, task.name) &&
+                type == task.type &&
                 Objects.equals(description, task.description) &&
                 Objects.equals(id, task.id) &&
-                status == task.status;
+                status == task.status &&
+                Objects.equals(duration, task.duration) &&
+                Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, id, status);
+        return Objects.hash(name, type, description, id, status, duration, startTime);
     }
 
     @Override
@@ -82,6 +108,8 @@ public class Task {
                 "\n name = " + name +
                 "\n status = " + status +
                 "\n description = " + description +
+                "\n startTime = " + startTime.format(DATE_TIME_FORMATTER) +
+                "\n duration = " + String.format("%d:%02d", duration.toHours(), duration.toMinutesPart()) +
                 '}';
     }
 
@@ -91,6 +119,8 @@ public class Task {
         task.setId(this.id);
         task.setStatus(this.status);
         task.setType(this.type);
+        task.setStartTime(this.startTime);
+        task.setDuration(this.duration);
         return task;
     }
 }

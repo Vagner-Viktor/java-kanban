@@ -33,6 +33,8 @@ public class Subtask extends Task {
                 "\n name = " + this.getName() +
                 "\n status = " + this.getStatus() +
                 "\n description = " + this.getDescription() +
+                "\n startTime = " + this.getStartTime().format(DATE_TIME_FORMATTER) +
+                "\n duration = " + String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart()) +
                 "\n epicId=" + epicId +
                 '}';
     }

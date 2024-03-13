@@ -2,6 +2,8 @@ package managers;
 
 import tasks.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -15,6 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager;
     }
 
+    @Override
     public void setIdCont(Long idCont) {
         if (this.idCont < idCont) this.idCont = idCont;
     }
@@ -89,7 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
         Long epicId = subtasksMap.get(subtaskId).getEpicId();
         if (!epicsMap.containsKey(epicId)) return false;
         epicsMap.get(epicId).removeSubtask(subtaskId);
-        epicsMap.get(epicId).setStatus(setCurrentEpicStatus(epicsMap.get(epicId)));
+        updateDataInEpic(epicsMap.get(epicId));
         historyManager.remove(subtaskId);
         subtasksMap.remove(subtaskId);
         return true;
@@ -119,6 +122,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasksMap.clear();
     }
 
+    @Override
     public void clearHistorySet(Set<Long> set) {
         for (Long l : set) {
             historyManager.remove(l);
@@ -146,7 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
         newSubtask.setEpicId(epicId);
         subtasksMap.put(newSubtask.getId(), newSubtask);
         epicsMap.get(epicId).addSubtask(newSubtask.getId());
-        epicsMap.get(epicId).setStatus(setCurrentEpicStatus(epicsMap.get(epicId)));
+        updateDataInEpic(epicsMap.get(epicId));
         return newSubtask.getId();
     }
 
@@ -157,14 +161,14 @@ public class InMemoryTaskManager implements TaskManager {
                 (subtask.getId() == subtask.getEpicId())) return false;
         subtasksMap.put(subtask.getId(), subtask);
         if (epicsMap.containsKey(subtask.getEpicId()))
-            epicsMap.get(subtask.getEpicId()).setStatus(setCurrentEpicStatus(epicsMap.get(subtask.getEpicId())));
+            updateDataInEpic(epicsMap.get(subtask.getEpicId()));
         return true;
     }
 
     @Override
     public boolean updateEpic(Epic epic) {
         if (!epicsMap.containsKey(epic.getId())) return false;
-        epic.setStatus(setCurrentEpicStatus(epic));
+        updateDataInEpic(epic);
         epicsMap.put(epic.getId(), epic);
         return true;
     }
@@ -199,6 +203,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public void updateDataInEpic(Epic epic){
+        epic.setStatus(setCurrentEpicStatus(epic));
+        updateEpicDurationAndStartEndTime(epic);
+    }
+    @Override
     public Status setCurrentEpicStatus(Epic epic) {
         boolean allInDone = true;
         for (Long l : epic.getSubtaskList()) {
@@ -215,6 +224,23 @@ public class InMemoryTaskManager implements TaskManager {
         return Status.NEW;
     }
 
+    @Override
+    public void updateEpicDurationAndStartEndTime(Epic epic) {
+        LocalDateTime startTime = epic.getSubtaskList().stream()
+                .map(subtaskId -> subtasksMap.get(subtaskId).getStartTime())
+                .min(Comparator.naturalOrder())
+                .orElseThrow();
+        LocalDateTime endTime = epic.getSubtaskList().stream()
+                .map(subtaskId -> subtasksMap.get(subtaskId).getStartTime().plus(subtasksMap.get(subtaskId).getDuration()))
+                .max(Comparator.naturalOrder())
+                .orElseThrow();
+        Duration duration = Duration.between(startTime,endTime);
+        epic.setStartTime(startTime);
+        epic.setEndTime(endTime);
+        epic.setDuration(duration);
+    }
+
+    @Override
     public void saveInHistory(Task task) {
         if (task != null) historyManager.add(task);
     }
