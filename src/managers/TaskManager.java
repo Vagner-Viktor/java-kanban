@@ -63,4 +63,6 @@ public interface TaskManager {
     void updateEpicDurationAndStartEndTime(Epic epic);
 
     void saveInHistory(Task task);
+
+    Set<Task> getPrioritizedTasks();
 }

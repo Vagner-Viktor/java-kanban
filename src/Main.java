@@ -16,7 +16,8 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
         taskManager = FileBackedTaskManager.loadFromFile(new File("tasks.csv"));
         //makeExampleData(taskManager);
-        printAllTasks(taskManager);
+        //printAllTasks(taskManager);
+        System.out.println("\n\n\nSorted:" + taskManager.getPrioritizedTasks());
     }
 
     private static void makeExampleData(TaskManager taskManager) {
