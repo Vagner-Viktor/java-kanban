@@ -5,25 +5,23 @@ import tasks.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FormatterUtil {
     public static String historyToString(HistoryManager manager) {
-        String result = "";
-        for (Task task : manager.getHistory()) {
-            result = result + task.getId() + ", ";
-        }
-        return result;
+        return manager.getHistory().stream()
+                .map(task -> task.getId().toString())
+                .collect(Collectors.joining(", "));
     }
 
     public static List<Long> historyFromString(String value) {
         String[] numbers = value.split(", ");
-        List<Long> historyList = new ArrayList<>();
-        for (String number : numbers) {
-            if (!number.isBlank() && !number.isEmpty()) historyList.add(Long.parseLong(number));
-        }
-        return historyList;
+        return Arrays.stream(numbers)
+                .filter(number -> (!number.isBlank() && !number.isEmpty()))
+                .map(number -> Long.parseLong(number))
+                .collect(Collectors.toList());
     }
 
     public static Task fromString(String value) {
@@ -52,7 +50,8 @@ public class FormatterUtil {
                 task.setStartTime(LocalDateTime.parse(values[5], Task.DATE_TIME_FORMATTER));
                 task.setDuration(Duration.ofMinutes(Integer.parseInt(values[6])));
                 return task;
-            default: return null;
+            default:
+                return null;
         }
     }
 
@@ -86,7 +85,8 @@ public class FormatterUtil {
                         task.getStartTime().format(Task.DATE_TIME_FORMATTER) + ", " +
                         task.getDuration().toMinutes();
                 return result;
-            default: return null;
+            default:
+                return null;
         }
     }
 }

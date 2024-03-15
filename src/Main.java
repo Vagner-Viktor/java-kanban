@@ -1,4 +1,5 @@
 import managers.FileBackedTaskManager;
+import managers.InMemoryTaskManager;
 import managers.Managers;
 import managers.TaskManager;
 import tasks.Epic;
@@ -9,15 +10,18 @@ import tasks.Task;
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
+        //TaskManager taskManager = Managers.getDefault();
+        TaskManager taskManager = new InMemoryTaskManager();
         taskManager = FileBackedTaskManager.loadFromFile(new File("tasks.csv"));
+        //taskManager = new FileBackedTaskManager(new File("tasks.csv"));
         //makeExampleData(taskManager);
-        //printAllTasks(taskManager);
-        System.out.println("\n\n\nSorted:" + taskManager.getPrioritizedTasks());
+        printAllTasks(taskManager);
+        //System.out.println("\n\n\nSorted:" + taskManager.getPrioritizedTasks());
     }
 
     private static void makeExampleData(TaskManager taskManager) {
