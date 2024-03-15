@@ -3,6 +3,7 @@ package managers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import tasks.Epic;
+import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
@@ -86,7 +87,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Optional<Epic> epic2 = epics.stream()
                 .filter(epic3 -> epic3.getId() == epicId)
                 .findFirst();
-        System.out.println(epics);
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(epicsCount + 1, epics.size(), "Неверное количество Эпиков.");
         assertEquals(epic, epic2.get(), "Эпики не совпадают.");
@@ -201,5 +201,112 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subtask2.setEpicId(1000L);
         taskManager.deleteSubtask(subtask2Id);
         assertEquals(subtaskCount + 2, taskManager.getSubtasks().size(), "Удаление подзадачи с неактуальным эпиком");
+    }
+
+    @Test
+    void checkEpicStatusAllSubtasksNEW() {
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Long[] subtasksListID = {200L, 300L, 400L, 500L, 600L};
+        for (long l : subtasksListID) {
+            Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
+            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setDuration(Duration.ofMinutes(60));
+            subtask.setId(l);
+            subtask.setStatus(Status.NEW);
+            taskManager.addSubtask(subtask, epicId);
+        }
+        assertEquals(Status.NEW, taskManager.getEpic(epicId).getStatus(), "Неверный статус эпика!");
+    }
+
+    @Test
+    void checkEpicStatusAllSubtasksDONE() {
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Long[] subtasksListID = {200L, 300L, 400L, 500L, 600L};
+        for (long l : subtasksListID) {
+            Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
+            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setDuration(Duration.ofMinutes(60));
+            subtask.setId(l);
+            subtask.setStatus(Status.DONE);
+            taskManager.addSubtask(subtask, epicId);
+        }
+        assertEquals(Status.DONE, taskManager.getEpic(epicId).getStatus(), "Неверный статус эпика!");
+    }
+
+    @Test
+    void checkEpicStatusAllSubtasksNEWandDONE() {
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Long[] subtasksListID = {200L, 301L, 400L, 501L, 600L};
+        for (long l : subtasksListID) {
+            Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
+            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setDuration(Duration.ofMinutes(60));
+            subtask.setId(l);
+            if (l % 2 == 0) subtask.setStatus(Status.DONE);
+            else subtask.setStatus(Status.NEW);
+            taskManager.addSubtask(subtask, epicId);
+        }
+        assertEquals(Status.IN_PROGRESS, taskManager.getEpic(epicId).getStatus(), "Неверный статус эпика!");
+    }
+
+    @Test
+    void checkEpicStatusAllSubtasksNEWandDONEandIN_PROGRESS() {
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Long[] subtasksListID = {200L, 303L, 401L, 501L, 600L};
+        for (long l : subtasksListID) {
+            Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
+            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setDuration(Duration.ofMinutes(60));
+            subtask.setId(l);
+            if (l % 2 == 0) subtask.setStatus(Status.DONE);
+            else if ((l % 3 == 0)) subtask.setStatus(Status.NEW);
+            else subtask.setStatus(Status.IN_PROGRESS);
+            taskManager.addSubtask(subtask, epicId);
+        }
+        assertEquals(Status.IN_PROGRESS, taskManager.getEpic(epicId).getStatus(), "Неверный статус эпика!");
+    }
+
+    @Test
+    void checkingTheIntersectionOfTasksFalse() {
+        int subtaskPrioCount = taskManager.getPrioritizedTasks().size();
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
+        subtask1.setStartTime(LocalDateTime.of(2020, 03, 01, 10, 00));
+        subtask1.setDuration(Duration.ofMinutes(60));
+        taskManager.addSubtask(subtask1, epicId);
+
+        Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
+        subtask2.setStartTime(LocalDateTime.of(2020, 03, 01, 11, 00));
+        subtask2.setDuration(Duration.ofMinutes(60));
+        taskManager.addSubtask(subtask2, epicId);
+
+        assertEquals(subtaskPrioCount+2,taskManager.getPrioritizedTasks().size(), "Неверное количество приоритезированных задач");
+        assertEquals(true, taskManager.getPrioritizedTasks().contains(subtask1), "Подзадачи нет в списке приоритезированных задач");
+        assertEquals(true, taskManager.getPrioritizedTasks().contains(subtask2), "Подзадачи нет в списке приоритезированных задач");
+    }
+
+    @Test
+    void checkingTheIntersectionOfTasksTrue() {
+        int subtaskPrioCount = taskManager.getPrioritizedTasks().size();
+        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
+        final Long epicId = taskManager.addEpic(epic);
+        Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
+        subtask1.setStartTime(LocalDateTime.of(2020, 03, 01, 10, 00));
+        subtask1.setDuration(Duration.ofMinutes(120));
+        taskManager.addSubtask(subtask1, epicId);
+
+        Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
+        subtask2.setStartTime(LocalDateTime.of(2020, 03, 01, 11, 00));
+        subtask2.setDuration(Duration.ofMinutes(60));
+        taskManager.addSubtask(subtask2, epicId);
+
+        assertEquals(subtaskPrioCount+1,taskManager.getPrioritizedTasks().size(), "Неверное количество приоритезированных задач");
+        assertEquals(true, taskManager.getPrioritizedTasks().contains(subtask1), "Подзадачи нет в списке приоритезированных задач");
+        assertEquals(false, taskManager.getPrioritizedTasks().contains(subtask2), "Подзадачи нет в списке приоритезированных задач");
     }
 }

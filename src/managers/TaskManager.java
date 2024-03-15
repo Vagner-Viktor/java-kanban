@@ -11,6 +11,7 @@ import java.util.Set;
 public interface TaskManager {
 
     void setIdCont(Long idCont);
+
     Long getIdCont();
 
     List<Task> getHistory();
@@ -60,6 +61,7 @@ public interface TaskManager {
     void updateDataInEpic(Epic epic);
 
     Status setCurrentEpicStatus(Epic epic);
+
     void updateEpicDurationAndStartEndTime(Epic epic);
 
     void saveInHistory(Task task);

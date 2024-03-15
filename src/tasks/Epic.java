@@ -19,9 +19,10 @@ public class Epic extends Task {
     }
 
     @Override
-    public LocalDateTime getEndTime(){
+    public LocalDateTime getEndTime() {
         return this.endTime;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,7 +47,7 @@ public class Epic extends Task {
                 "\n description = " + this.getDescription() +
                 "\n startTime = " + this.getStartTime().format(DATE_TIME_FORMATTER) +
                 "\n endTime = " + this.getEndTime().format(DATE_TIME_FORMATTER) +
-                "\n duration = " + String.format("%d:%02d",this.getDuration().toHours(), this.getDuration().toMinutesPart()) +
+                "\n duration = " + String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart()) +
                 "\n subtasksList=" + subtasksList +
                 '}';
     }

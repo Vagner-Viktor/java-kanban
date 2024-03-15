@@ -226,10 +226,10 @@ public class InMemoryTaskManager implements TaskManager {
                 .findFirst()
                 .isEmpty()) return Status.DONE;
         if (epic.getSubtaskList().stream()
-                .filter(l -> Status.NEW.equals(subtasksMap.get(l).getStatus()))
+                .filter(l -> !Status.NEW.equals(subtasksMap.get(l).getStatus()))
                 .findFirst()
-                .isEmpty()) return Status.IN_PROGRESS;
-        return Status.NEW;
+                .isEmpty()) return Status.NEW;
+        return Status.IN_PROGRESS;
     }
 
     @Override

@@ -151,4 +151,31 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
         Files.deleteIfExists(Paths.get(emptyFile.toString()));
     }
+
+    @Test
+    void checkThrowsManagerLoadException() throws ManagerLoadException, IOException {
+        File file = File.createTempFile("tmp_tasks", ".csv");
+        try {
+            BufferedWriter fileWrite = new BufferedWriter(new FileWriter(file));
+            fileWrite.write("id, type, name, status,");
+            fileWrite.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            ;
+        }
+
+        assertThrows(ManagerLoadException.class, () -> {
+            TaskManager filetaskLoadManager = FileBackedTaskManager.loadFromFile(file);
+        }, "Ошибка при загрузке файла!");
+        Files.deleteIfExists(Paths.get(file.toString()));
+    }
+
+    @Test
+    void checkThrowsManagerLoadEmptyException() throws ManagerLoadEmptyException, IOException {
+        File emptyFile = File.createTempFile("empty", ".csv");
+        assertThrows(ManagerLoadEmptyException.class, () -> {
+            TaskManager filetaskLoadManager = FileBackedTaskManager.loadFromFile(emptyFile);
+        }, "Ошибка при загрузке файла. Файл пуст!");
+        Files.deleteIfExists(Paths.get(emptyFile.toString()));
+    }
 }
