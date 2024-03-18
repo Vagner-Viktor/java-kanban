@@ -109,7 +109,7 @@ class InMemoryHistoryManagerTest {
     void checkHistorySizeRandom1_100000() {
         Task task = new Task("Test addNewTaskForHistory", "Test addNewTaskForHistory description");
         Random random = new Random();
-        final long historySize = random.nextInt(100_000)+1;
+        final long historySize = random.nextInt(100_000) + 1;
         for (long i = 1; i <= historySize; i++) {
             task.setId(i);
             historyManager.add(task);
@@ -118,4 +118,56 @@ class InMemoryHistoryManagerTest {
         assertEquals(historySize, history.size(), "В истории неверное количество задач!");
     }
 
+    @Test
+    void checkEmptyAndNotEmptyHistory() {
+        final List<Task> emptyHistory = historyManager.getHistory();
+        assertEquals(0, emptyHistory.size(), "В истории неверное количество задач!");
+        assertNotNull(emptyHistory, "История не возвращается.");
+
+        Task task = new Task("Test addNewTaskForHistory", "Test addNewTaskForHistory description");
+        int historySize = 10;
+        for (long i = 1; i <= historySize; i++) {
+            task.setId(i);
+            historyManager.add(task);
+        }
+        final List<Task> history = historyManager.getHistory();
+        assertEquals(historySize, history.size(), "В истории неверное количество задач!");
+        assertNotNull(history, "История не возвращается.");
+    }
+
+    @Test
+    void add10DuplicationTasksInHistory() {
+        Task task = new Task("Test addNewTaskForHistory", "Test addNewTaskForHistory description");
+        int historySize = 10;
+        for (long i = 1; i <= historySize; i++) {
+            task.setId(100L);
+            historyManager.add(task);
+        }
+        final List<Task> history = historyManager.getHistory();
+        assertEquals(1, history.size(), "В истории неверное количество задач!");
+    }
+
+    @Test
+    void removeTasksInHistoryBeginEndMiddle() {
+        Task task = new Task("Test addNewTaskForHistory", "Test addNewTaskForHistory description");
+        int historySize = 10;
+        for (long i = 1; i <= historySize; i++) {
+            task.setId(i);
+            historyManager.add(task);
+        }
+        historyManager.remove(1L);
+        assertEquals(historySize - 1, historyManager.getHistory().size(), "В истории неверное количество задач!");
+        task.setId(1L);
+        assertFalse(historyManager.getHistory().contains(task), "Задачи не должно быть в истории");
+
+        historyManager.remove(10L);
+        assertEquals(historySize - 2, historyManager.getHistory().size(), "В истории неверное количество задач!");
+        task.setId(10L);
+        assertFalse(historyManager.getHistory().contains(task), "Задачи не должно быть в истории");
+
+        historyManager.remove(5L);
+        assertEquals(historySize - 3, historyManager.getHistory().size(), "В истории неверное количество задач!");
+        task.setId(5L);
+        assertFalse(historyManager.getHistory().contains(task), "Задачи не должно быть в истории");
+    }
 }

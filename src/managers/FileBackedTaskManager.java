@@ -3,7 +3,9 @@ package managers;
 import exceptions.ManagerLoadEmptyException;
 import exceptions.ManagerLoadException;
 import exceptions.ManagerSaveException;
-import tasks.*;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
 import utils.FormatterUtil;
 
 import java.io.*;
@@ -128,7 +130,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             String line = fileRead.readLine();
             if (line == null) {
                 throw new ManagerLoadEmptyException();
-            } else if (!line.equals("id, type, name, status, description, epic")) {
+            } else if (!line.equals("id, type, name, status, description, epic, start, duration")) {
                 throw new ManagerLoadException();
             }
             while (fileRead.ready()) {
@@ -172,9 +174,17 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private void save() throws ManagerSaveException {
+        /*************** START OF FILE ***************
+         id, type, name, status, description, epic, start, duration
+         1,TASK,Task1,NEW,Description task1,StartDateTime,durationMIN
+         2,EPIC,Epic2,DONE,Description epic2,
+         3,SUBTASK,Sub Task2,DONE,Description sub task3,2,StartDateTime,durationMIN
+         History
+         1, 2,
+         *************** END OF FILE ***************/
         if (file == null) return;
         try (BufferedWriter fileWrite = new BufferedWriter(new FileWriter(file))) {
-            fileWrite.write("id, type, name, status, description, epic");
+            fileWrite.write("id, type, name, status, description, epic, start, duration");
             fileWrite.newLine();
             for (Task task : getTasks()) {
                 fileWrite.write(FormatterUtil.toString(task));
