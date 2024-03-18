@@ -1,4 +1,4 @@
 package exceptions;
 
-public class ManagerLoadEmptyException extends RuntimeException{
+public class ManagerLoadEmptyException extends RuntimeException {
 }

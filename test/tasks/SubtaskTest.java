@@ -2,12 +2,13 @@ package tasks;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class SubtaskTest {
 
     @Test
-    void newSubtask(){
+    void newSubtask() {
         String name = "SubtaskName";
         String description = "SubtaskDescription";
         Subtask subtask = new Subtask(name, description);
@@ -16,6 +17,7 @@ class SubtaskTest {
         assertEquals(subtask.getDescription(), description, "Описание подзадачи не совпадает.");
         assertEquals(subtask.getStatus(), Status.NEW, "Cтатус подзадачи не верный.");
     }
+
     @Test
     void checkEqualsSubtask() {
         Subtask subtask1 = new Subtask("Test addNewSubtaskWithSameID", "Test addNewSubtaskWithSameID description");

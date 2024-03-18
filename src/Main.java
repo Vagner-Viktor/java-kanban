@@ -14,15 +14,13 @@ public class Main {
 
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
-        //TaskManager taskManager = new InMemoryTaskManager();
         taskManager = FileBackedTaskManager.loadFromFile(new File("tasks.csv"));
-        //taskManager = new FileBackedTaskManager(new File("tasks.csv"));
-        //makeExampleData(taskManager);
+        makeExampleData(taskManager);
         printAllTasks(taskManager);
-        //System.out.println("\n\n\nSorted:" + taskManager.getPrioritizedTasks());
     }
 
     private static void makeExampleData(TaskManager taskManager) {
+        if (taskManager.getTasks().size() > 0) return;
         Long newEpicId;
         Long newTaskId;
         Long newSubtaskId;

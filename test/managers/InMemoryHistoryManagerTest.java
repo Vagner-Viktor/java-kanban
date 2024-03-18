@@ -156,18 +156,18 @@ class InMemoryHistoryManagerTest {
             historyManager.add(task);
         }
         historyManager.remove(1L);
-        assertEquals(historySize-1, historyManager.getHistory().size(), "В истории неверное количество задач!");
+        assertEquals(historySize - 1, historyManager.getHistory().size(), "В истории неверное количество задач!");
         task.setId(1L);
-        assertEquals(false,historyManager.getHistory().contains(task),"Задачи не должно быть в истории");
+        assertFalse(historyManager.getHistory().contains(task), "Задачи не должно быть в истории");
 
         historyManager.remove(10L);
-        assertEquals(historySize-2, historyManager.getHistory().size(), "В истории неверное количество задач!");
+        assertEquals(historySize - 2, historyManager.getHistory().size(), "В истории неверное количество задач!");
         task.setId(10L);
-        assertEquals(false,historyManager.getHistory().contains(task),"Задачи не должно быть в истории");
+        assertFalse(historyManager.getHistory().contains(task), "Задачи не должно быть в истории");
 
         historyManager.remove(5L);
-        assertEquals(historySize-3, historyManager.getHistory().size(), "В истории неверное количество задач!");
+        assertEquals(historySize - 3, historyManager.getHistory().size(), "В истории неверное количество задач!");
         task.setId(5L);
-        assertEquals(false,historyManager.getHistory().contains(task),"Задачи не должно быть в истории");
+        assertFalse(historyManager.getHistory().contains(task), "Задачи не должно быть в истории");
     }
 }

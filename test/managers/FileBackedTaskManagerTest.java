@@ -88,7 +88,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
         TaskManager filetaskWriteManager = new FileBackedTaskManager(emptyFile);
         filetaskWriteManager.getTask(1L);
-        assertEquals(true, Files.exists(Paths.get(emptyFile.toString())), "Пустой файл не создан.");
+        assertTrue(Files.exists(Paths.get(emptyFile.toString())), "Пустой файл не создан.");
         Files.deleteIfExists(Paths.get(emptyFile.toString()));
     }
 
@@ -98,7 +98,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
             Long linesInFile = Files.lines(Paths.get(testFile.toString())).count();
 
             Task task = new Task("Test addNewTask", "Test addNewTask description");
-            task.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+            task.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
             task.setDuration(Duration.ofMinutes(60));
             taskManager.addTask(task);
             Long newLinesInFile = Files.lines(Paths.get(testFile.toString())).count();
@@ -126,12 +126,12 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         }
         TaskManager taskManager1 = new FileBackedTaskManager(emptyFile);
         Task task = new Task("Test addNewTaskWithSameID", "Test addNewTaskWithSameID description");
-        task.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        task.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         task.setDuration(Duration.ofMinutes(60));
         final long taskId1 = taskManager1.addTask(task);
         final Task savedTask1TM1 = taskManager1.getTask(taskId1);
         Task task2 = new Task("Test addNewTaskWithSameID2", "Test addNewTaskWithSameID2 description");
-        task2.setStartTime(LocalDateTime.of(2024, 03, 02, 10, 00));
+        task2.setStartTime(LocalDateTime.of(2022, 03, 02, 10, 00));
         task2.setDuration(Duration.ofMinutes(30));
         final long taskId2 = taskManager1.addTask(task2);
         final Task savedTask2TM1 = taskManager1.getTask(taskId2);
@@ -161,7 +161,6 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
             fileWrite.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
-            ;
         }
 
         assertThrows(ManagerLoadException.class, () -> {

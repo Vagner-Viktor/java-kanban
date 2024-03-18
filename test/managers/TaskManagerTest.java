@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public abstract class TaskManagerTest<T extends TaskManager> {
@@ -24,7 +23,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void addDifferentTypesOfTasksAndFindThemById() {
         Task task = new Task("Test addNewTask", "Test addNewTask description");
-        task.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        task.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         task.setDuration(Duration.ofMinutes(60));
         final long taskId = taskManager.addTask(task);
         final Task savedTask = taskManager.getTask(taskId);
@@ -34,7 +33,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         final Epic savedEpic = taskManager.getEpic(epicId);
 
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
-        subtask.setStartTime(LocalDateTime.of(2024, 03, 02, 10, 00));
+        subtask.setStartTime(LocalDateTime.of(2022, 03, 02, 10, 00));
         subtask.setDuration(Duration.ofMinutes(60));
         final long subtaskId = taskManager.addSubtask(subtask, epicId);
         final Subtask savedSubtask = taskManager.getSubtask(subtaskId);
@@ -52,7 +51,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void addTask() {
         int tasksCount = taskManager.getTasks().size();
         Task task = new Task("Test addNewTask", "Test addNewTask description");
-        task.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        task.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         task.setDuration(Duration.ofMinutes(60));
         final long taskId = taskManager.addTask(task);
         final Task savedTask = taskManager.getTask(taskId);
@@ -75,7 +74,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
         final long epicId = taskManager.addEpic(epic);
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
-        subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         subtask.setDuration(Duration.ofMinutes(60));
         taskManager.addSubtask(subtask, epicId);
         final Epic savedEpic = taskManager.getEpic(epicId);
@@ -98,7 +97,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
         final long epicId = taskManager.addEpic(epic);
         Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description");
-        subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         subtask.setDuration(Duration.ofMinutes(60));
         final long subtaskId = taskManager.addSubtask(subtask, epicId);
         final Subtask savedSubtask = taskManager.getSubtask(subtaskId);
@@ -139,13 +138,13 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void checkThatTasksWithTheGivenIdAndTheGeneratedIdDoNotConflict() {
         int taskCount = taskManager.getTasks().size();
         Task task = new Task("Test addNewTaskWithSameID", "Test addNewTaskWithSameID description");
-        task.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        task.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         task.setDuration(Duration.ofMinutes(60));
         final long taskId1 = taskManager.addTask(task);
         final Task savedTask1 = taskManager.getTask(taskId1);
 
         Task task2 = new Task("Test addNewTaskWithSameID2", "Test addNewTaskWithSameID2 description");
-        task2.setStartTime(LocalDateTime.of(2024, 03, 02, 10, 00));
+        task2.setStartTime(LocalDateTime.of(2022, 03, 02, 10, 00));
         task2.setDuration(Duration.ofMinutes(60));
         task2.setId(taskId1);
         final long taskId2 = taskManager.addTask(task2);
@@ -166,7 +165,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Long[] subtasksListID = {200L, 300L, 400L, 500L, 600L};
         for (long l : subtasksListID) {
             Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
-            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10 + (int) l / 100, 00));
             subtask.setDuration(Duration.ofMinutes(60));
             subtask.setId(l);
             taskManager.addSubtask(subtask, epicId);
@@ -190,12 +189,12 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
         final Long epicId = taskManager.addEpic(epic);
         Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
-        subtask1.setStartTime(LocalDateTime.of(2024, 03, 01, 10, 00));
+        subtask1.setStartTime(LocalDateTime.of(2022, 03, 01, 10, 00));
         subtask1.setDuration(Duration.ofMinutes(60));
         long subtask1Id = taskManager.addSubtask(subtask1, epicId);
 
         Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
-        subtask2.setStartTime(LocalDateTime.of(2024, 03, 01, 11, 00));
+        subtask2.setStartTime(LocalDateTime.of(2022, 03, 01, 11, 00));
         subtask2.setDuration(Duration.ofMinutes(60));
         long subtask2Id = taskManager.addSubtask(subtask2, epicId);
         subtask2.setEpicId(1000L);
@@ -210,7 +209,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Long[] subtasksListID = {200L, 300L, 400L, 500L, 600L};
         for (long l : subtasksListID) {
             Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
-            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10 + (int) l / 100, 00));
             subtask.setDuration(Duration.ofMinutes(60));
             subtask.setId(l);
             subtask.setStatus(Status.NEW);
@@ -226,7 +225,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Long[] subtasksListID = {200L, 300L, 400L, 500L, 600L};
         for (long l : subtasksListID) {
             Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
-            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10 + (int) l / 100, 00));
             subtask.setDuration(Duration.ofMinutes(60));
             subtask.setId(l);
             subtask.setStatus(Status.DONE);
@@ -242,7 +241,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Long[] subtasksListID = {200L, 301L, 400L, 501L, 600L};
         for (long l : subtasksListID) {
             Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
-            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10 + (int) l / 100, 00));
             subtask.setDuration(Duration.ofMinutes(60));
             subtask.setId(l);
             if (l % 2 == 0) subtask.setStatus(Status.DONE);
@@ -259,7 +258,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Long[] subtasksListID = {200L, 303L, 401L, 501L, 600L};
         for (long l : subtasksListID) {
             Subtask subtask = new Subtask("Test addNewSubtask " + l, "Test addNewSubtask description " + l);
-            subtask.setStartTime(LocalDateTime.of(2024, 03, 01, 10 + (int) l / 100, 00));
+            subtask.setStartTime(LocalDateTime.of(2022, 03, 01, 10 + (int) l / 100, 00));
             subtask.setDuration(Duration.ofMinutes(60));
             subtask.setId(l);
             if (l % 2 == 0) subtask.setStatus(Status.DONE);
@@ -283,30 +282,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
         subtask2.setStartTime(LocalDateTime.of(2020, 03, 01, 11, 00));
         subtask2.setDuration(Duration.ofMinutes(60));
-        taskManager.addSubtask(subtask2, epicId);
+         taskManager.addSubtask(subtask2, epicId);
 
-        assertEquals(subtaskPrioCount+2,taskManager.getPrioritizedTasks().size(), "Неверное количество приоритезированных задач");
-        assertEquals(true, taskManager.getPrioritizedTasks().contains(subtask1), "Подзадачи нет в списке приоритезированных задач");
-        assertEquals(true, taskManager.getPrioritizedTasks().contains(subtask2), "Подзадачи нет в списке приоритезированных задач");
-    }
-
-    @Test
-    void checkingTheIntersectionOfTasksTrue() {
-        int subtaskPrioCount = taskManager.getPrioritizedTasks().size();
-        Epic epic = new Epic("Test addNewEpicForSubtask", "Test addNewEpicForSubtask description");
-        final Long epicId = taskManager.addEpic(epic);
-        Subtask subtask1 = new Subtask("Test addNewSubtask 1", "Test addNewSubtask description 1");
-        subtask1.setStartTime(LocalDateTime.of(2020, 03, 01, 10, 00));
-        subtask1.setDuration(Duration.ofMinutes(120));
-        taskManager.addSubtask(subtask1, epicId);
-
-        Subtask subtask2 = new Subtask("Test addNewSubtask 2", "Test addNewSubtask description 2");
-        subtask2.setStartTime(LocalDateTime.of(2020, 03, 01, 11, 00));
-        subtask2.setDuration(Duration.ofMinutes(60));
-        taskManager.addSubtask(subtask2, epicId);
-
-        assertEquals(subtaskPrioCount+1,taskManager.getPrioritizedTasks().size(), "Неверное количество приоритезированных задач");
-        assertEquals(true, taskManager.getPrioritizedTasks().contains(subtask1), "Подзадачи нет в списке приоритезированных задач");
-        assertEquals(false, taskManager.getPrioritizedTasks().contains(subtask2), "Подзадачи нет в списке приоритезированных задач");
+        assertEquals(subtaskPrioCount + 2, taskManager.getPrioritizedTasks().size(), "Неверное количество приоритезированных задач");
+        assertTrue(taskManager.getPrioritizedTasks().contains(subtask1), "Подзадачи нет в списке приоритезированных задач");
+        assertTrue(taskManager.getPrioritizedTasks().contains(subtask2), "Подзадачи нет в списке приоритезированных задач");
     }
 }

@@ -1,6 +1,9 @@
 package managers;
 
-import tasks.*;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 import utils.PrioritizedTasks;
 
 import java.time.Duration;
@@ -10,11 +13,11 @@ import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private Long idCont = 1L;
-    private Map<Long, Task> tasksMap = new HashMap<>();
-    private Map<Long, Epic> epicsMap = new HashMap<>();
-    private Map<Long, Subtask> subtasksMap = new HashMap<>();
+    private final Map<Long, Task> tasksMap = new HashMap<>();
+    private final Map<Long, Epic> epicsMap = new HashMap<>();
+    private final Map<Long, Subtask> subtasksMap = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private PrioritizedTasks prioritizedTasks = new PrioritizedTasks();
+    private final PrioritizedTasks prioritizedTasks = new PrioritizedTasks();
 
     public HistoryManager getHistoryManager() {
         return historyManager;
