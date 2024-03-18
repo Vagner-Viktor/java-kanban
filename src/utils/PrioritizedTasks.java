@@ -6,15 +6,17 @@ import tasks.Task;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 public class PrioritizedTasks {
     private final Set<Task> prioritizedTasks = new TreeSet<>((task1, task2) -> task1.getStartTime().compareTo(task2.getStartTime()));
+    private static final Logger logger = Logger.getLogger(PrioritizedTasks.class.getName());
 
     public void add(Task task) {
         try {
             if (!checkingTheIntersectionOfTasks(task)) prioritizedTasks.add(task);
         } catch (TasksPriorityIntersection e) {
-            System.out.println("Задачи пересекаются! Добавляемая задача: \n" + task);
+            logger.info("Задачи пересекаются! Добавляемая задача: \n" + task);
         }
     }
 
