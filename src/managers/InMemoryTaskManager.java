@@ -237,6 +237,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateEpicDurationAndStartEndTime(Epic epic) {
+        if (epic.getSubtaskList().isEmpty()) {
+            epic.setStartTime(null);
+            epic.setEndTime(null);
+            epic.setDuration(null);
+            return;
+        }
         LocalDateTime startTime = epic.getSubtaskList().stream()
                 .map(subtaskId -> subtasksMap.get(subtaskId).getStartTime())
                 .min(Comparator.naturalOrder())
@@ -259,6 +265,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks.getPrioritizedTasks();
+    }
+
+    @Override
+    public boolean checkTheIntersectionOfTasks(Task task) {
+        return prioritizedTasks.checkTheIntersectionOfTasks(task);
     }
 
     private Long getNewId(Long currentId) {

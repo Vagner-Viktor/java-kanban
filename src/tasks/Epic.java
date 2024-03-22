@@ -40,14 +40,22 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
+        String startTimeS = "null";
+        String endTimeS = "null";
+        String durationS = "null";
+        if (this.getStartTime() != null && this.getEndTime() != null && this.getDuration() != null) {
+            startTimeS = this.getStartTime().format(DATE_TIME_FORMATTER);
+            endTimeS = this.getEndTime().format(DATE_TIME_FORMATTER);
+            durationS = String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart());
+        }
         return "\n" + this.getType() + "{" +
                 "\n id = " + this.getId() +
                 "\n name = " + this.getName() +
                 "\n status = " + this.getStatus() +
                 "\n description = " + this.getDescription() +
-                "\n startTime = " + this.getStartTime().format(DATE_TIME_FORMATTER) +
-                "\n endTime = " + this.getEndTime().format(DATE_TIME_FORMATTER) +
-                "\n duration = " + String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart()) +
+                "\n startTime = " + startTimeS +
+                "\n endTime = " + endTimeS +
+                "\n duration = " + durationS +
                 "\n subtasksList=" + subtasksList +
                 '}';
     }

@@ -14,7 +14,7 @@ public class PrioritizedTasks {
 
     public void add(Task task) {
         try {
-            if (!checkingTheIntersectionOfTasks(task)) prioritizedTasks.add(task);
+            if (!checkTheIntersectionOfTasks(task) && task.getStartTime() != null) prioritizedTasks.add(task);
         } catch (TasksPriorityIntersection e) {
             logger.info("Задачи пересекаются! Добавляемая задача: \n" + task);
         }
@@ -38,8 +38,9 @@ public class PrioritizedTasks {
         return prioritizedTasks;
     }
 
-    public boolean checkingTheIntersectionOfTasks(Task task) {
-        if ((task.getStartTime() == null) || (prioritizedTasks.stream()
+    public boolean checkTheIntersectionOfTasks(Task task) {
+        if (task.getStartTime() == null) return false;
+        if ((prioritizedTasks.stream()
                 .filter(task2 -> ((task2.getStartTime().isBefore(task.getStartTime()) &&
                         task2.getStartTime().plus(task2.getDuration()).isAfter(task.getStartTime())) ||
                         task2.getStartTime().equals(task.getStartTime())))

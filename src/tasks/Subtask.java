@@ -1,6 +1,8 @@
 package tasks;
 
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
@@ -8,6 +10,11 @@ public class Subtask extends Task {
 
     public Subtask(String name, String description) {
         super(name, description);
+        this.setType(TaskTypes.SUBTASK);
+    }
+
+    public Subtask(String name, String description, LocalDateTime startTime, Duration duration) {
+        super(name, description, startTime, duration);
         this.setType(TaskTypes.SUBTASK);
     }
 
@@ -28,13 +35,19 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
+        String startTimeS = "null";
+        String durationS = "null";
+        if (this.getStartTime() != null && this.getEndTime() != null && this.getDuration() != null) {
+            startTimeS = this.getStartTime().format(DATE_TIME_FORMATTER);
+            durationS = String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart());
+        }
         return "\n" + this.getType() + "{" +
                 "\n id = " + this.getId() +
                 "\n name = " + this.getName() +
                 "\n status = " + this.getStatus() +
                 "\n description = " + this.getDescription() +
-                "\n startTime = " + this.getStartTime().format(DATE_TIME_FORMATTER) +
-                "\n duration = " + String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart()) +
+                "\n startTime = " + startTimeS +
+                "\n duration = " + durationS +
                 "\n epicId=" + epicId +
                 '}';
     }
