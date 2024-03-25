@@ -67,4 +67,6 @@ public interface TaskManager {
     void saveInHistory(Task task);
 
     Set<Task> getPrioritizedTasks();
+
+    boolean checkTheIntersectionOfTasks(Task task);
 }

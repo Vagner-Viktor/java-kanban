@@ -24,7 +24,7 @@ class PrioritizedTasksTest {
         subtask2.setDuration(Duration.ofMinutes(60));
 
         assertThrows(TasksPriorityIntersection.class, () -> {
-            prioritizedTasks.checkingTheIntersectionOfTasks(subtask2);
+            prioritizedTasks.checkTheIntersectionOfTasks(subtask2);
         }, "Пересечение задач по времени!");
     }
 

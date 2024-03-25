@@ -5,6 +5,7 @@ import tasks.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class FormatterUtil {
     }
 
     public static List<Long> historyFromString(String value) {
+        if (value == null) return new ArrayList<Long>();
         String[] numbers = value.split(", ");
         return Arrays.stream(numbers)
                 .filter(number -> (!number.isBlank() && !number.isEmpty()))

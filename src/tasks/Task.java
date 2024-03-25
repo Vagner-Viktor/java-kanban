@@ -22,6 +22,15 @@ public class Task {
         this.type = TaskTypes.TASK;
     }
 
+    public Task(String name, String description, LocalDateTime startTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.type = TaskTypes.TASK;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
     public String getName() {
         return name;
     }
@@ -103,13 +112,19 @@ public class Task {
 
     @Override
     public String toString() {
+        String startTimeS = "null";
+        String durationS = "null";
+        if (this.getStartTime() != null && this.getEndTime() != null && this.getDuration() != null) {
+            startTimeS = this.getStartTime().format(DATE_TIME_FORMATTER);
+            durationS = String.format("%d:%02d", this.getDuration().toHours(), this.getDuration().toMinutesPart());
+        }
         return "\n" + type + "{" +
                 "\n id = " + id +
                 "\n name = " + name +
                 "\n status = " + status +
                 "\n description = " + description +
-                "\n startTime = " + startTime.format(DATE_TIME_FORMATTER) +
-                "\n duration = " + String.format("%d:%02d", duration.toHours(), duration.toMinutesPart()) +
+                "\n startTime = " + startTimeS +
+                "\n duration = " + durationS +
                 '}';
     }
 
