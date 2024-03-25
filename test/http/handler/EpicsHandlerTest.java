@@ -1,12 +1,7 @@
 package http.handler;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import http.HttpTaskServer;
-import managers.InMemoryTaskManager;
-import managers.TaskManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import http.HttpTaskServerTest;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Subtask;
@@ -23,27 +18,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class EpicsHandlerTest {
-    TaskManager taskManager = new InMemoryTaskManager();
-    HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
+class EpicsHandlerTest extends HttpTaskServerTest {
     String apiUrl = "http://localhost:8080/api/v1/epics";
-    private Gson gson;
 
     EpicsHandlerTest() throws IOException {
-    }
-
-    @BeforeEach
-    public void setUp() {
-        taskManager.deleteAllTasks();
-        taskManager.deleteAllSubtasks();
-        taskManager.deleteAllEpic();
-        gson = HttpTaskServer.getGson();
-        httpTaskServer.start();
-    }
-
-    @AfterEach
-    public void shutDown() {
-        httpTaskServer.stop(0);
     }
 
     @Test
